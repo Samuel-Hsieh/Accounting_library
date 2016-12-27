@@ -17,6 +17,7 @@ public class AccountingDB extends SQLiteOpenHelper {
     private final static String _Expenses = "expenses"; //支出
     private final static String _Income = "income"; //收入
     private final static String _Items = "items"; //項目
+    private final static String _Moneys = "moneys"; //項目
 
     public AccountingDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -50,7 +51,11 @@ public class AccountingDB extends SQLiteOpenHelper {
                 "_item VARCHAR NULL " +
                 ");";
         db.execSQL(ItemsSQL);
-
+        final String MoneySQL = "CREATE TABLE IF NOT EXISTS " + _Moneys + "( " +
+                "_account VARCHAR NULL, " +
+                "_money VARCHAR NULL " +
+                ");";
+        db.execSQL(MoneySQL);
     }
 
     @Override
@@ -59,7 +64,9 @@ public class AccountingDB extends SQLiteOpenHelper {
         db.execSQL(Expense);
         final String Income = "DROP TABLE " +_Income;
         db.execSQL(Income);
-        final String Items = "DROP TABLE " +_Income;
+        final String Items = "DROP TABLE " +_Items;
         db.execSQL(Items);
+        final String Moneys = "DROP TABLE " +_Moneys;
+        db.execSQL(Moneys);
     }
 }
