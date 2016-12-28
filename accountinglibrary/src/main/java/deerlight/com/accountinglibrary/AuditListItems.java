@@ -7,23 +7,17 @@ package deerlight.com.accountinglibrary;
 public class AuditListItems {
 
     String data;
-    String item;
-    String comment;
     String money;
+    String comment;
+    String item;
+    String account;
 
-    public AuditListItems(String data, String item, String comment, String money) {
+    public AuditListItems(String data, String money, String comment, String item, String account) {
         this.data = data;
-        this.item = item;
+        this.money = money;
         this.comment = comment;
-        this.money = money;
-    }
-
-    public String getMoney() {
-        return money;
-    }
-
-    public void setMoney(String money) {
-        this.money = money;
+        this.item = item;
+        this.account = account;
     }
 
     public String getData() {
@@ -34,12 +28,12 @@ public class AuditListItems {
         this.data = data;
     }
 
-    public String getItem() {
-        return item;
+    public String getMoney() {
+        return money;
     }
 
-    public void setItem(String item) {
-        this.item = item;
+    public void setMoney(String money) {
+        this.money = money;
     }
 
     public String getComment() {
@@ -48,5 +42,21 @@ public class AuditListItems {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

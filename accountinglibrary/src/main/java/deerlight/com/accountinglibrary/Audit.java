@@ -13,27 +13,27 @@ import java.util.ArrayList;
 
 public class Audit {
 
-    private Double payoutTotal;
     Context context;
     ArrayList<AuditListItems> ArrayAudit = new ArrayList<>();
     Cursor cursor;
 
-    public  Audit(Context context, String POSTS_SELECT_QUERY) {
+    public Audit(Context context, String POSTS_SELECT_QUERY) {
         this.context = context;
         AccountingDB DB = new AccountingDB(context);
         SQLiteDatabase sqLiteDatabase = DB.getReadableDatabase();
         cursor = sqLiteDatabase.rawQuery(POSTS_SELECT_QUERY, null);
     }
+
     /**
      * 計算total
      */
     public Double getTotal() {
+        Double payoutTotal = 0D;
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            payoutTotal = Double.valueOf(cursor.getString(3));
-            while (cursor.moveToNext()) {
+            do {
                 payoutTotal = payoutTotal + Double.valueOf(cursor.getString(3));
-            }
+            } while (cursor.moveToNext());
         }
         return payoutTotal;
     }
@@ -48,7 +48,8 @@ public class Audit {
                 ArrayAudit.add(new AuditListItems(cursor.getString(0)
                         , cursor.getString(1)
                         , cursor.getString(2)
-                        , cursor.getString(3)));
+                        , cursor.getString(3)
+                        , cursor.getString(4)));
             } while (cursor.moveToNext());
         }
         return ArrayAudit;
