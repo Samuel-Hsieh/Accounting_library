@@ -1,7 +1,10 @@
 package deerlight.com.accountinglibrary;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,8 +25,12 @@ public class StoreUserData {
     private static final String ACCOUNT_NO_EXIST = "帳戶不存在";
     private static final String REMOVE_ITEM = "已刪除項目";
     private static final String REMOVE_ACCOUNT = "已刪除帳戶";
+    private static final String UPDATE_SUCCESS = "編輯成功";
+    private final static String _Item = "item"; //金額
+    private final static String _Account = "account"; //金額
 
     Context context;
+    AccountingDB DB;
 
     public StoreUserData(Context context) {
         this.context = context;
@@ -31,85 +38,134 @@ public class StoreUserData {
 
     //新增項目
     public void AddItem(String mItem) {
-        SharedPreferences sharedPref = context.getSharedPreferences("Item", Context.MODE_PRIVATE);
-        if (!sharedPref.contains(mItem)) {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(mItem, mItem);
-            if (editor.commit()) {
-                showToast(SUCCESS);
-            } else {
-                showToast(FAILED);
-            }
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_item", mItem);
+        long check = sqLiteDatabase.insert(_Item, null, contentValues);
+        if (check > 0) {
+            showToast(SUCCESS);
         } else {
             showToast(ITEM_EXIST);
         }
+        CloseDB();
     }
 
     //新增帳戶
     public void AddAccount(String mAccount) {
-        SharedPreferences sharedPref = context.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        if (!sharedPref.contains(mAccount)) {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(mAccount, mAccount);
-            if (editor.commit()) {
-                showToast(SUCCESS);
-            } else {
-                showToast(FAILED);
-            }
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_account", mAccount);
+        long check = sqLiteDatabase.insert(_Account, null, contentValues);
+        if (check > 0) {
+            showToast(SUCCESS);
         } else {
             showToast(ACCOUNT_EXIST);
         }
+        CloseDB();
     }
 
     //取得項目
-    public ArrayList<String> getItem() {
-        SharedPreferences sharedPref = context.getSharedPreferences("Item", Context.MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPref.getAll();
-        ArrayList<String> ItemList = new ArrayList<>();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            ItemList.add(entry.getValue().toString());
+    public ArrayList<String> getItem(String POSTS_SELECT_QUERY) {
+        OpenDB();
+        ArrayList<String> ListItem = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = DB.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(POSTS_SELECT_QUERY, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                ListItem.add(cursor.getString(0));
+            } while (cursor.moveToNext());
         }
-        return ItemList;
+        CloseDB();
+        return ListItem;
     }
 
     //取得帳戶
-    public ArrayList<String> getAccount() {
-        SharedPreferences sharedPref = context.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPref.getAll();
-        ArrayList<String> AccountList = new ArrayList<>();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            AccountList.add(entry.getValue().toString());
+    public ArrayList<String> getAccount(String POSTS_SELECT_QUERY) {
+        OpenDB();
+        ArrayList<String> ListAccount = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = DB.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(POSTS_SELECT_QUERY, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                ListAccount.add(cursor.getString(0));
+            } while (cursor.moveToNext());
         }
-        return AccountList;
+        CloseDB();
+        return ListAccount;
+    }
+
+    //編輯項目
+    public void UpdateItem(String OldItem, String NewItem) {
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_item", NewItem);
+        long check = sqLiteDatabase.update(_Item, contentValues
+                , "_item = '" + OldItem + "'", null);
+        if (check > 0) {
+            showToast(UPDATE_SUCCESS);
+        } else {
+            showToast(ITEM_NO_EXIST);
+        }
+        CloseDB();
+    }
+
+    //編輯帳戶
+    public void UpdateAccount(String OldAccount, String NewAccount) {
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_account", NewAccount);
+        long check = sqLiteDatabase.update(_Account, contentValues
+                , "_account = '" + OldAccount + "'", null);
+        if (check > 0) {
+            showToast(UPDATE_SUCCESS);
+        } else {
+            showToast(ACCOUNT_NO_EXIST);
+        }
+        CloseDB();
     }
 
     //刪除項目
     public void removeItem(String item) {
-        SharedPreferences sharedPref = context.getSharedPreferences("Item", Context.MODE_PRIVATE);
-        if (sharedPref.contains(item)) {
-            SharedPreferences.Editor editor = sharedPref.edit().remove(item);
-            if (editor.commit()) {
-                showToast(REMOVE_ITEM);
-            } else {
-                showToast(FAILED);
-            }
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        long check = sqLiteDatabase.delete(_Item
+                , "_item = '" + item + "'", null);
+        if (check > 0) {
+            showToast(REMOVE_ITEM);
         } else {
             showToast(ITEM_NO_EXIST);
         }
+        CloseDB();
     }
 
     //刪除帳戶
     public void removeAccount(String account) {
-        SharedPreferences sharedPref = context.getSharedPreferences("Account", Context.MODE_PRIVATE);
-        if (sharedPref.contains(account)) {
-            SharedPreferences.Editor editor = sharedPref.edit().remove(account);
-            if (editor.commit()) {
-                showToast(REMOVE_ACCOUNT);
-            } else {
-                showToast(FAILED);
-            }
+        OpenDB();
+        SQLiteDatabase sqLiteDatabase = DB.getWritableDatabase();
+        long check = sqLiteDatabase.delete(_Account
+                , "_account = '" + account + "'", null);
+        if (check > 0) {
+            showToast(REMOVE_ACCOUNT);
         } else {
             showToast(ACCOUNT_NO_EXIST);
+        }
+        CloseDB();
+    }
+
+    private void OpenDB() {
+        DB = new AccountingDB(context);
+    }
+
+    private void CloseDB() {
+        if (DB != null) {
+            DB.close();
+            DB = null;
         }
     }
 

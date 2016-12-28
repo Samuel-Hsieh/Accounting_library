@@ -6,18 +6,28 @@ package deerlight.com.accountinglibrary;
 
 public class AuditListItems {
 
+    int id;
     String data;
     String money;
     String comment;
     String item;
     String account;
 
-    public AuditListItems(String data, String money, String comment, String item, String account) {
+    public AuditListItems(int id, String data, String money, String comment, String item, String account) {
+        this.id = id;
         this.data = data;
         this.money = money;
         this.comment = comment;
         this.item = item;
         this.account = account;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getData() {

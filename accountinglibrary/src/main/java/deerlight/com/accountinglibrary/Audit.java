@@ -32,7 +32,7 @@ public class Audit {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                payoutTotal = payoutTotal + Double.valueOf(cursor.getString(3));
+                payoutTotal = payoutTotal + Double.valueOf(cursor.getString(2));
             } while (cursor.moveToNext());
         }
         return payoutTotal;
@@ -45,11 +45,12 @@ public class Audit {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                ArrayAudit.add(new AuditListItems(cursor.getString(0)
+                ArrayAudit.add(new AuditListItems(cursor.getInt(0)
                         , cursor.getString(1)
                         , cursor.getString(2)
                         , cursor.getString(3)
-                        , cursor.getString(4)));
+                        , cursor.getString(4)
+                        , cursor.getString(5)));
             } while (cursor.moveToNext());
         }
         return ArrayAudit;

@@ -17,6 +17,8 @@ public class AccountingDB extends SQLiteOpenHelper {
     private final static String _Expenses = "expenses"; //支出
     private final static String _Income = "income"; //收入
     private final static String _Moneys = "moneys"; //金額
+    private final static String _Item = "item"; //金額
+    private final static String _Account = "account"; //金額
 
     public AccountingDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -33,6 +35,7 @@ public class AccountingDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String ExpensesSQL = "CREATE TABLE IF NOT EXISTS " + _Expenses + "( " +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "_date DATE NULL, " +
                 "_money VARCHAR NULL, " +
                 "_note VARCHAR NULL, " +
@@ -41,6 +44,7 @@ public class AccountingDB extends SQLiteOpenHelper {
                 ");";
         db.execSQL(ExpensesSQL);
         final String IncomeSQL = "CREATE TABLE IF NOT EXISTS " + _Income + "( " +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "_date DATE NULL, " +
                 "_money VARCHAR NULL, " +
                 "_note VARCHAR NULL, " +
@@ -48,6 +52,14 @@ public class AccountingDB extends SQLiteOpenHelper {
                 "_account VARCHAR NULL " +
                 ");";
         db.execSQL(IncomeSQL);
+        final String ItemSQL = "CREATE TABLE IF NOT EXISTS " + _Item + "( " +
+                "_item VARCHAR PRIMARY KEY " +
+                ");";
+        db.execSQL(ItemSQL);
+        final String AccountSQL = "CREATE TABLE IF NOT EXISTS " + _Account + "( " +
+                "_account VARCHAR PRIMARY KEY " +
+                ");";
+        db.execSQL(AccountSQL);
         final String MoneySQL = "CREATE TABLE IF NOT EXISTS " + _Moneys + "( " +
                 "_account VARCHAR NULL, " +
                 "_money VARCHAR NULL " +
@@ -61,6 +73,10 @@ public class AccountingDB extends SQLiteOpenHelper {
         db.execSQL(Expense);
         final String Income = "DROP TABLE " + _Income;
         db.execSQL(Income);
+        final String Item = "DROP TABLE " + _Item;
+        db.execSQL(Item);
+        final String Account = "DROP TABLE " + _Account;
+        db.execSQL(Account);
         final String Moneys = "DROP TABLE " + _Moneys;
         db.execSQL(Moneys);
     }
