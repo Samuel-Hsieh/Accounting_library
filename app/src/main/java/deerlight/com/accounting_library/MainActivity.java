@@ -12,10 +12,13 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-import deerlight.com.accountinglibrary.Accounting;
-import deerlight.com.accountinglibrary.Audit;
-import deerlight.com.accountinglibrary.AuditListItems;
-import deerlight.com.accountinglibrary.StoreUserData;
+import deerlight.com.accountinglibrary.access.read.AuditAccountingItem;
+import deerlight.com.accountinglibrary.access.read.AuditDepositAccount;
+import deerlight.com.accountinglibrary.access.write.Accounting;
+import deerlight.com.accountinglibrary.access.read.Audit;
+import deerlight.com.accountinglibrary.access.bean.AuditListItems;
+import deerlight.com.accountinglibrary.access.write.AccountingItem;
+import deerlight.com.accountinglibrary.access.write.DepositAccount;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,15 +33,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                test_Remove();
+//                test_Remove("expenses");
 //                test_UpdateExpenses("expenses");
 //                test_expenses();
 //                test_income();
 //                test_audit("income");
 //                test_audit("expenses");
-//                test_additem("早餐");
+//                test_additem("點心");
 //                test_AuditItems();
-//                test_AddAccount("台灣銀行");
+//                test_AddAccount("央行");
 //                test_AuditAccount();
 //                test_UpdateItem();
 //                test_UpdateAccount();
@@ -70,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
      * 測試支出
      */
     private void test_expenses() {
-        Accounting accounting = new Accounting(this, "2016/12/30", "1000", "滋滋滋", "expenses", "JiJI銀行");
-        accounting.setSelectedItem("聖誕老公公鼠");
+        Accounting accounting = new Accounting(this, "2016/12/29", "10000", "嗚嗚嗚", "expenses", "現金");
+        accounting.setSelectedItem("買禮物");
         accounting.SaveDataToDB();
     }
 
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
      * 測試收入
      */
     private void test_income() {
-        Accounting accounting = new Accounting(this, "2016/12/28", "1000", "曝鹿工作室", "income", "中華郵政");
+        Accounting accounting = new Accounting(this, "2016/12/22", "30000", "TAAZE", "income", "永豐銀行");
         accounting.setSelectedItem("薪水");
         accounting.SaveDataToDB();
     }
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         for (AuditListItems b : a) {
             Log.v("AuditData", "ID: " + b.getId());
             Log.v("AuditData", "Data: " + b.getData());
-            Log.v("AuditData", "Item: " + b.getItem());
+            Log.v("AuditData", "item: " + b.getItem());
             Log.v("AuditData", "Comment: " + b.getComment());
             Log.v("AuditData", "Money: " + b.getMoney());
             Log.v("AuditData", "Account: " + b.getAccount());
@@ -107,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
      * 測試新增項目
      */
     private void test_additem(String item) {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.AddItem(item);
+        AccountingItem accountingItem = new AccountingItem(this);
+        accountingItem.Insert(item);
     }
 
     /**
      * 測試新增帳戶
      */
     private void test_AddAccount(String item) {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.AddAccount(item);
+        DepositAccount depositAccount = new DepositAccount(this);
+        depositAccount.Insert(item);
     }
 
     /**
@@ -125,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     private void test_AuditItems() {
         ArrayList<String> ItemList;
         String sql = "SELECT _item FROM item";
-        StoreUserData storeUserData = new StoreUserData(this);
-        ItemList = storeUserData.getItem(sql);
+        AuditAccountingItem auditAccountingItem = new AuditAccountingItem(this);
+        ItemList = auditAccountingItem.getItem(sql);
         for (String item : ItemList) {
             Log.v("test_AuditItems", "項目: " + item);
         }
@@ -138,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
     private void test_AuditAccount() {
         ArrayList<String> AccountList;
         String sql = "SELECT _account FROM account";
-        StoreUserData storeUserData = new StoreUserData(this);
-        AccountList = storeUserData.getAccount(sql);
+        AuditDepositAccount auditDepositAccount = new AuditDepositAccount(this);
+        AccountList = auditDepositAccount.getAccount(sql);
         for (String account : AccountList) {
             Log.v("test_AuditAccount", "帳戶: " + account);
         }
@@ -149,49 +152,48 @@ public class MainActivity extends AppCompatActivity {
      * 測試編輯項目
      */
     private void test_UpdateItem() {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.UpdateItem("午餐", "早餐");
+        AccountingItem accountingItem = new AccountingItem(this);
+        accountingItem.Update("點心", "早餐");
     }
 
     /**
-     * 測試編輯項目
+     * 測試編輯帳戶
      */
     private void test_UpdateAccount() {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.UpdateAccount("彰化銀行", "中華郵政");
+        DepositAccount depositAccount = new DepositAccount(this);
+        depositAccount.Update("央行", "中華郵政"); //Old , New
     }
 
     /**
      * 測試刪除項目
      */
     private void test_RemoveItem() {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.removeItem("早餐");
+        AccountingItem accountingItem = new AccountingItem(this);
+        accountingItem.Remove("早餐");
     }
 
     /**
      * 測試刪除帳戶
      */
     private void test_RemoveAccount() {
-        StoreUserData storeUserData = new StoreUserData(this);
-        storeUserData.removeAccount("台灣銀行");
+        DepositAccount depositAccount = new DepositAccount(this);
+        depositAccount.Remove("中華郵政");
     }
 
     /**
      * 編輯記帳
      */
     private void test_UpdateExpenses(String table) {
-        Accounting accounting = new Accounting(this, "2016/12/27", "1000", "我我我", table, "郵局"); //需要更改成
-        accounting.setSelectedItem("呵呵");
-        accounting.UpdateDataToDB(11); //需要更改的資料
+        Accounting accounting = new Accounting(this, "2016/12/29", "10000", "嗚嗚嗚", table, "現金"); //需要更改成
+        accounting.setSelectedItem("禮物");
+        accounting.UpdateDataToDB(5); //需要更改的id
     }
 
     /**
      * 刪除記帳
      */
-    private void test_Remove() {
-        Accounting accounting = new Accounting(this, "2016/12/29", "100", "嗚嗚嗚", "expenses", "彰化銀行"); //需要刪除的資料
-        accounting.setSelectedItem("這三小");
-        accounting.RemoveDataToDB(11);
+    private void test_Remove(String table) {
+        Accounting accounting = new Accounting(this, table); //需要刪除的資料
+        accounting.RemoveDataToDB(4);
     }
 }

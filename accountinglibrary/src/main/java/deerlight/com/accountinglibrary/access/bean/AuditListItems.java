@@ -1,4 +1,4 @@
-package deerlight.com.accountinglibrary;
+package deerlight.com.accountinglibrary.access.bean;
 
 /**
  * Created by taaze on 2016/12/27.

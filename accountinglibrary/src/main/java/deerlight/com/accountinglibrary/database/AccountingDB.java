@@ -1,4 +1,4 @@
-package deerlight.com.accountinglibrary;
+package deerlight.com.accountinglibrary.database;
 
 import android.content.Context;
 import android.database.DatabaseErrorHandler;

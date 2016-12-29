@@ -1,6 +1,10 @@
 package deerlight.com.accountinglibrary;
 
+import android.support.v4.media.MediaMetadataCompat;
+
 import org.junit.Test;
+
+import deerlight.com.accountinglibrary.access.write.DepositAccount;
 
 import static org.junit.Assert.*;
 

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">AccountingLibrary</string>
+    <string name="FAILED">不明原因失敗</string>
+    <string name="INSERT_SUCCESS">新增成功</string>
+    <string name="ITEM_EXIST">項目已存在</string>
+    <string name="ITEM_NO_EXIST">項目不存在</string>
+    <string name="ACCOUNT_EXIST">帳戶已存在</string>
+    <string name="ACCOUNT_NO_EXIST">帳戶不存在</string>
+    <string name="REMOVE_ITEM">已刪除項目</string>
+    <string name="REMOVE_ACCOUNT">已刪除帳戶</string>
+    <string name="UPDATE_SUCCESS">編輯成功</string>
+    <string name="REMOVE_SUCCESS">刪除成功</string>
 </resources>
