@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.view.ActionMode;
 
 /**
  * Created by samuel_hsieh on 2016/12/26.
@@ -16,7 +15,6 @@ public class AccountingDB extends SQLiteOpenHelper {
     private final static String _DBName = "accounting.db";  //資料庫名稱
     private final static String _Expenses = "expenses"; //支出
     private final static String _Income = "income"; //收入
-    private final static String _Moneys = "moneys"; //金額
     private final static String _Item = "item"; //金額
     private final static String _Account = "account"; //金額
 
@@ -57,14 +55,10 @@ public class AccountingDB extends SQLiteOpenHelper {
                 ");";
         db.execSQL(ItemSQL);
         final String AccountSQL = "CREATE TABLE IF NOT EXISTS " + _Account + "( " +
-                "_account VARCHAR PRIMARY KEY " +
-                ");";
-        db.execSQL(AccountSQL);
-        final String MoneySQL = "CREATE TABLE IF NOT EXISTS " + _Moneys + "( " +
-                "_account VARCHAR NULL, " +
+                "_account VARCHAR PRIMARY KEY, " +
                 "_money VARCHAR NULL " +
                 ");";
-        db.execSQL(MoneySQL);
+        db.execSQL(AccountSQL);
     }
 
     @Override
@@ -77,7 +71,5 @@ public class AccountingDB extends SQLiteOpenHelper {
         db.execSQL(Item);
         final String Account = "DROP TABLE " + _Account;
         db.execSQL(Account);
-        final String Moneys = "DROP TABLE " + _Moneys;
-        db.execSQL(Moneys);
     }
 }

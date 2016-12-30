@@ -4,7 +4,7 @@ package deerlight.com.accountinglibrary.access.bean;
  * Created by taaze on 2016/12/27.
  */
 
-public class AuditListItems {
+public class AuditBean {
 
     int id;
     String data;
@@ -13,7 +13,7 @@ public class AuditListItems {
     String item;
     String account;
 
-    public AuditListItems(int id, String data, String money, String comment, String item, String account) {
+    public AuditBean(int id, String data, String money, String comment, String item, String account) {
         this.id = id;
         this.data = data;
         this.money = money;

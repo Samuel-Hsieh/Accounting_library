@@ -12,11 +12,12 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import deerlight.com.accountinglibrary.access.bean.AuditAccountBean;
 import deerlight.com.accountinglibrary.access.read.AuditAccountingItem;
 import deerlight.com.accountinglibrary.access.read.AuditDepositAccount;
 import deerlight.com.accountinglibrary.access.write.Accounting;
 import deerlight.com.accountinglibrary.access.read.Audit;
-import deerlight.com.accountinglibrary.access.bean.AuditListItems;
+import deerlight.com.accountinglibrary.access.bean.AuditBean;
 import deerlight.com.accountinglibrary.access.write.AccountingItem;
 import deerlight.com.accountinglibrary.access.write.DepositAccount;
 
@@ -39,14 +40,14 @@ public class MainActivity extends AppCompatActivity {
 //                test_income();
 //                test_audit("income");
 //                test_audit("expenses");
-//                test_additem("點心");
+//                test_additem("早餐");
 //                test_AuditItems();
-//                test_AddAccount("央行");
+//                test_AddAccount("郵局","1000");
 //                test_AuditAccount();
-//                test_UpdateItem();
-//                test_UpdateAccount();
-//                test_RemoveItem();
-//                test_RemoveAccount();
+//                test_UpdateItem("早餐", "午餐");
+//                test_UpdateAccount("郵局","中國信託","2000");
+//                test_RemoveItem("午餐");
+//                test_RemoveAccount("中國信託");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -94,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
 //        String sql = "SELECT _date , _money , _note , _item , _account FROM '" + table + "'"+"WHERE _account = '現金'";
         String sql = "SELECT _id , _date , _money , _note , _item , _account FROM '" + table + "'";
         Audit audit = new Audit(this, sql);
-        ArrayList<AuditListItems> a = audit.getAudit();
+        ArrayList<AuditBean> a = audit.getAudit();
         Log.v("AuditData", "total: " + audit.getTotal());
-        for (AuditListItems b : a) {
+        for (AuditBean b : a) {
             Log.v("AuditData", "ID: " + b.getId());
             Log.v("AuditData", "Data: " + b.getData());
             Log.v("AuditData", "item: " + b.getItem());
@@ -117,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 測試新增帳戶
      */
-    private void test_AddAccount(String item) {
+    private void test_AddAccount(String account, String money) {
         DepositAccount depositAccount = new DepositAccount(this);
-        depositAccount.Insert(item);
+        depositAccount.Insert(account, money);
     }
 
     /**
@@ -139,45 +140,46 @@ public class MainActivity extends AppCompatActivity {
      * 測試查詢帳戶
      */
     private void test_AuditAccount() {
-        ArrayList<String> AccountList;
-        String sql = "SELECT _account FROM account";
+        ArrayList<AuditAccountBean> AccountList;
+        String sql = "SELECT _account , _money FROM account";
         AuditDepositAccount auditDepositAccount = new AuditDepositAccount(this);
         AccountList = auditDepositAccount.getAccount(sql);
-        for (String account : AccountList) {
-            Log.v("test_AuditAccount", "帳戶: " + account);
+        for (AuditAccountBean accountList : AccountList) {
+            Log.v("test_AuditAccount", "帳戶: " + accountList.getAccount());
+            Log.v("test_AuditAccount", "金額: " + accountList.getMoney());
         }
     }
 
     /**
      * 測試編輯項目
      */
-    private void test_UpdateItem() {
+    private void test_UpdateItem(String OldItem, String NewItem) {
         AccountingItem accountingItem = new AccountingItem(this);
-        accountingItem.Update("點心", "早餐");
+        accountingItem.Update(OldItem, NewItem);
     }
 
     /**
      * 測試編輯帳戶
      */
-    private void test_UpdateAccount() {
+    private void test_UpdateAccount(String OldAccount, String NewAccount, String NewMoney) {
         DepositAccount depositAccount = new DepositAccount(this);
-        depositAccount.Update("央行", "中華郵政"); //Old , New
+        depositAccount.Update(OldAccount, NewAccount, NewMoney); //Old , New
     }
 
     /**
      * 測試刪除項目
      */
-    private void test_RemoveItem() {
+    private void test_RemoveItem(String item) {
         AccountingItem accountingItem = new AccountingItem(this);
-        accountingItem.Remove("早餐");
+        accountingItem.Remove(item);
     }
 
     /**
      * 測試刪除帳戶
      */
-    private void test_RemoveAccount() {
+    private void test_RemoveAccount(String Account) {
         DepositAccount depositAccount = new DepositAccount(this);
-        depositAccount.Remove("中華郵政");
+        depositAccount.Remove(Account);
     }
 
     /**

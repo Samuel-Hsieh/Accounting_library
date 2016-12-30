@@ -12,7 +12,7 @@ import deerlight.com.accountinglibrary.database.AccountingDB;
  * Created by samuel_hsieh on 2016/12/26.
  */
 
-public class Accounting {
+public class Accounting implements DBcontroller {
 
     String InputType = null;
     Context context;
@@ -93,11 +93,13 @@ public class Accounting {
         CloseDB();
     }
 
-    private void OpenDB() {
+    @Override
+    public void OpenDB() {
         DB = new AccountingDB(context);
     }
 
-    private void CloseDB() {
+    @Override
+    public void CloseDB() {
         if (DB != null) {
             DB.close();
             DB = null;
@@ -113,11 +115,11 @@ public class Accounting {
     }
 
     //顯示Toast
-    private void showToast(String message) {
+    public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    private String getString(int id){
-        return  context.getResources().getString(id);
+    private String getString(int id) {
+        return context.getResources().getString(id);
     }
 }

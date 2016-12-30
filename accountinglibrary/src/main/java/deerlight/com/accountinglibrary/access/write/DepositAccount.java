@@ -12,7 +12,7 @@ import deerlight.com.accountinglibrary.database.AccountingDB;
  * Created by taaze on 2016/12/29.
  */
 
-public class DepositAccount implements DataWrite {
+public class DepositAccount implements DBcontroller {
 
 
     private final static String _Account = "account"; //金額
@@ -25,12 +25,12 @@ public class DepositAccount implements DataWrite {
         this.context = context;
     }
 
-    @Override
-    public void Insert(String mAccount) {
+    public void Insert(String mAccount, String money) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
         contentValues = new ContentValues();
         contentValues.put("_account", mAccount);
+        contentValues.put("_money", money);
         long check = sqLiteDatabase.insert(_Account, null, contentValues);
         if (check > 0) {
             showToast(getString(R.string.INSERT_SUCCESS));
@@ -40,12 +40,12 @@ public class DepositAccount implements DataWrite {
         CloseDB();
     }
 
-    @Override
-    public void Update(String OldAccount, String NewAccount) {
+    public void Update(String OldAccount, String NewAccount, String NewMoney) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
         contentValues = new ContentValues();
         contentValues.put("_account", NewAccount);
+        contentValues.put("_money", NewMoney);
         long check = sqLiteDatabase.update(_Account, contentValues
                 , "_account = '" + OldAccount + "'", null);
         if (check > 0) {
@@ -56,7 +56,6 @@ public class DepositAccount implements DataWrite {
         CloseDB();
     }
 
-    @Override
     public void Remove(String account) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
@@ -91,12 +90,11 @@ public class DepositAccount implements DataWrite {
         }
     }
 
-    @Override
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    private String getString(int id){
-        return  context.getResources().getString(id);
+    private String getString(int id) {
+        return context.getResources().getString(id);
     }
 }

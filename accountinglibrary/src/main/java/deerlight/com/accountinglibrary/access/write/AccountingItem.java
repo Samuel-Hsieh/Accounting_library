@@ -12,7 +12,7 @@ import deerlight.com.accountinglibrary.database.AccountingDB;
  * Created by taaze on 2016/12/29.
  */
 
-public class AccountingItem implements DataWrite {
+public class AccountingItem implements DBcontroller {
 
     private final static String _Item = "item"; //金額
     Context context;
@@ -24,7 +24,6 @@ public class AccountingItem implements DataWrite {
         this.context = context;
     }
 
-    @Override
     public void Insert(String mItem) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
@@ -39,7 +38,6 @@ public class AccountingItem implements DataWrite {
         CloseDB();
     }
 
-    @Override
     public void Update(String OldItem, String NewItem) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
@@ -55,7 +53,6 @@ public class AccountingItem implements DataWrite {
         CloseDB();
     }
 
-    @Override
     public void Remove(String item) {
         OpenDB();
         sqLiteDatabase = DB.getWritableDatabase();
@@ -90,12 +87,11 @@ public class AccountingItem implements DataWrite {
         }
     }
 
-    @Override
     public void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    private String getString(int id){
-        return  context.getResources().getString(id);
+    private String getString(int id) {
+        return context.getResources().getString(id);
     }
 }

@@ -1,24 +1,24 @@
 package deerlight.com.accountinglibrary.access.read;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+import deerlight.com.accountinglibrary.access.write.DBcontroller;
 import deerlight.com.accountinglibrary.database.AccountingDB;
 
 /**
  * Created by taaze on 2016/12/29.
  */
 
-public class AuditAccountingItem {
+public class AuditAccountingItem implements DBcontroller {
 
     Context context;
+    Cursor cursor;
     AccountingDB DB;
     SQLiteDatabase sqLiteDatabase;
-    ContentValues contentValues;
 
     public AuditAccountingItem(Context context) {
         this.context = context;
@@ -29,7 +29,7 @@ public class AuditAccountingItem {
         OpenDB();
         ArrayList<String> ListItem = new ArrayList<>();
         sqLiteDatabase = DB.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(POSTS_SELECT_QUERY, null);
+        cursor = sqLiteDatabase.rawQuery(POSTS_SELECT_QUERY, null);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
@@ -40,11 +40,13 @@ public class AuditAccountingItem {
         return ListItem;
     }
 
-    private void OpenDB() {
+    @Override
+    public void OpenDB() {
         DB = new AccountingDB(context);
     }
 
-    private void CloseDB() {
+    @Override
+    public void CloseDB() {
         if (DB != null) {
             DB.close();
             DB = null;
@@ -53,9 +55,9 @@ public class AuditAccountingItem {
             sqLiteDatabase.close();
             sqLiteDatabase = null;
         }
-        if (contentValues != null) {
-            contentValues.clear();
-            contentValues = null;
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
         }
     }
 }
